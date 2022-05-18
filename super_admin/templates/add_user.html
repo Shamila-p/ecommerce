@@ -1,0 +1,73 @@
+{% extends 'admin_base.html'%}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+            </span>Add User
+        </h3>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <form method="post" >
+                            {%csrf_token%}
+
+                            <div class="form-group">
+                                <label for="name"> Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter name" name="name"
+                                    required />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter Email"
+                                    name="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Phone No</label>
+                                <input type="text" class="form-control" id="phone" placeholder="Enter Phone No"
+                                    name="phone" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Password</label>
+                                <input type="password" class="form-control" id="password1" placeholder="Enter password"
+                                    name="password1" required />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Confirm Password</label>
+                                <input type="password" class="form-control" id="password2"
+                                    placeholder="Re-Enter password" name="password2" required />
+
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary">ADD</button>
+
+                        </form>
+                        <br>
+                        <div>
+                            {% for message in messages %}
+                            <div class="alert alert-primary" role="alert">
+                                <p> {{message}}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'admin_base.html'%}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+            </span>User
+        </h3>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="/admin/user/add"> ADD USER<i
+                            class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> Name </th>
+                                    <th> Email </th>
+                                    <th> Phone No </th>
+                                    <th> Status </th>
+                                    <th> Last Login </th>
+                                    <th> Date Joined </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for user in users%}
+                                <tr>
+                                    <td> {{user.first_name}}  </td>
+                                    <td> {{user.email}} </td>
+                                   
+                                    <td> {{user.phone}}</td>
+                                    <td>
+                                        {%if user.is_active %}
+                                        <label class="badge badge-gradient-success">ACTIVE</label>
+                                        {%else%}
+                                        <label class="badge badge-gradient-success">DEACTIVE</label>
+                                        {%endif%}
+                                    </td>
+                                    <td>{{user.last_login}} </td>
+                                    <td>{{user.date_joined}}</td>
+                                    <td><button class="btn btn-primary btn-sm"style="text-decoration:none" ><a href="/admin/user/edit/{{user.id}}">EDIT</a></button></td>
+                                    <td><form method="post" action="/admin/user/block/{{user.id}}">{%csrf_token%}<button class="btn btn-warning btn-sm" type="submit">ACTIVATE/<br>DEACTIVATE</form></td>
+                                    <td><form method="post" action="/admin/user/delete/{{user.id}}">{%csrf_token%}<button class="btn btn-danger btn-sm" type="submit">Delete</form></td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
