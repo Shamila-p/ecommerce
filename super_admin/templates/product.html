@@ -1,0 +1,63 @@
+{% extends 'admin_base.html'%}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+            </span>Product
+        </h3>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="/admin/product/add"> ADD PRODUCT<i
+                            class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> Id </th>
+                                    <th> Name </th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Category</th>
+                                    <th>Image</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for product in products%}
+                                <tr>
+                                    <td>{{product.id}}</td>
+                                    <td>{{product.name}}</td>
+                                    <td>{{product.description}}</td>
+                                    <td>{{product.price}}</td>
+                                    <td>{{product.quantity}}</td>
+                                    <td>{{product.category.name}}</td>
+                                    <td><img src="{{product.image_url}}" alt=""></td>
+                                    <td><a href="/admin/product/edit/{{product.id}}" class="btn btn-primary">EDIT</a></td>
+                                    <td><form method="post" action="/admin/product/delete/{{product.id}}">{%csrf_token%}<button type="submit" class="btn btn-warning">DELETE</button></form></td>
+
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

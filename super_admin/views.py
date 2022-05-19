@@ -1,7 +1,11 @@
 from email import message
+from typing import NamedTuple
+from unicodedata import name
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from super_admin.models import Category
+from super_admin.models import Product
 from user.models import CustomUser
 
 
@@ -125,10 +129,114 @@ def block_user(request, user_id):
         return redirect('/admin/login')
     if request.method == 'POST':
         user = CustomUser.objects.get(id=user_id)
-        if user.is_active == True:
-            user.is_active = False
-            user.save()
-        else:
-            user.is_active = True
-            user.save()
+        # if user.is_active == True:
+        #     user.is_active = False
+        # else:
+        #     user.is_active = True
+        user.is_active = not user.is_active
+        user.save()
         return redirect('/admin/user')
+
+
+def category(request):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    categories = Category.objects.all()
+    return render(request, 'category.html', {'categories': categories})
+
+
+def add_category(request):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.POST['name']
+        Category.objects.create(name=name)
+        print('category create')
+        return redirect('/admin/category')
+    else:
+        return render(request, 'add_category.html')
+
+
+def edit_category(request, category_id):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.POST['name']
+        category = Category.objects.get(id=category_id)
+        category.name = name
+        category.save()
+        return redirect('/admin/category')
+
+    else:
+        category = Category.objects.get(id=category_id)
+        return render(request, 'edit_category.html', {'category': category})
+
+
+def delete_category(request, category_id):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        category = Category.objects.get(id=category_id)
+        category.delete()
+        return redirect('/admin/category')
+
+
+def product(request):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    products = Product.objects.all()
+    return render(request, 'product.html', {'products': products})
+
+
+def add_product(request):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.POST['name']
+        description = request.POST['description']
+        price = request.POST['price']
+        quantity = request.POST['quantity']
+        category_id = request.POST['category']
+        image = request.FILES['image']
+        Product.objects.create(name=name, description=description, price=price,
+                               quantity=quantity, category_id=category_id, image=image)
+        return redirect('/admin/product')
+    else:
+        categories = Category.objects.all()
+        return render(request, 'add_product.html', {'categories': categories})
+
+
+def edit_product(request, product_id):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.POST['name']
+        description = request.POST['description']
+        price = request.POST['price']
+        quantity = request.POST['quantity']
+        category_id = request.POST['category']
+        image = request.FILES.get('image')
+        print(image)
+        product = Product.objects.get(id=product_id)
+        product.name = name
+        product.description = description
+        product.price = price
+        product.quantity = quantity
+        product.category_id = category_id
+        if image is not None:
+            product.image = image
+        product.save()
+        return redirect('/admin/product')
+    else:
+        categories = Category.objects.all()
+        product = Product.objects.get(id=product_id)
+        return render(request, 'edit_product.html', {'product': product, 'categories': categories})
+
+
+def delete_product(request, product_id):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        product = Product.objects.get(id=product_id)
+        product.delete()
+        return redirect('/admin/product')

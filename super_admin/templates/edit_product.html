@@ -1,0 +1,66 @@
+{% extends 'admin_base.html'%}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+            </span>Edit Product
+        </h3>
+
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <form method="post" enctype="multipart/form-data" >
+                            {%csrf_token%}
+
+                            <div class="form-group">
+                                <label for="name"> Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter name of category" name="name" value="{{product.name}}"
+                                    required />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Description</label>
+                                <input type="text" class="form-control" id="desc" placeholder="Enter description"
+                                    name="description" required value="{{product.description}}"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Price</label>
+                                <input type="text" class="form-control" id="price" placeholder="Enter price"
+                                    name="price" required value="{{product.price}}"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" 
+                                    name="quantity" required placeholder="Enter quantity"value="{{product.quantity}}" />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Category</label>
+                                <select name="category" id="category" class="form-control"  >
+                                    {%for category in categories%}
+                                    <option value={{category.id}} {%if product.category.id == category.id %} selected {%endif%}>{{category.name}}</option>
+                                    {%endfor%}
+                                </select>
+
+                            </div>
+                            <div>
+                                <img src="{{product.image_url}}" alt="" style="height:100px;width:100px;">
+                                <br><br>
+                                <input type="file" class="form-control" id="image" accept="image/*"
+                                name="image">
+                            </div>
+                             <br>
+                            <button type="submit" class="btn btn-primary">EDIT</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

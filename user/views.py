@@ -8,7 +8,6 @@ from django.contrib.auth import logout
 from .models import CustomUser
 
 
-
 def home(request):
     return render(request, 'home.html')
 
@@ -64,7 +63,7 @@ def signup(request):
                 messages.info(request, 'name field cannot be empty!!')
             elif email == "":
                 messages.info(request, 'email field cannot be empty!!')
-            elif phone =="":
+            elif phone == "":
                 messages.info(request, 'phone no field cannot be empty!!')
             elif password1 == "":
                 messages.info(request, 'password field cannot be empty!!')
@@ -77,13 +76,12 @@ def signup(request):
                         return redirect('/signup')
                     else:
                         CustomUser.objects.create_user(
-                           username=email ,email=email, first_name=name,phone=phone, password=password1)                      
+                            username=email, email=email, first_name=name, phone=phone, password=password1)
                         print('user created')
                         return redirect('/login')
                 else:
                     messages.info(request, 'password not matching')
             return redirect('/signup')
-
         else:
             return render(request, 'signup.html')
 
@@ -93,4 +91,5 @@ def logout(request):
     return redirect('/')
 
 
-    
+def user_profile(request):
+    return render(request, 'user_profile.html')

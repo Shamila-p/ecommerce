@@ -1,0 +1,53 @@
+{% extends 'admin_base.html'%}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+            </span>Category
+        </h3>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="/admin/category/add"> ADD CATEGORY<i
+                            class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> Id </th>
+                                    <th> Name </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for category in categories%}
+                                <tr>
+                                    <td>{{category.id}}</td>
+                                    <td>{{category.name}}</td>
+                                    <td><a href="/admin/category/edit/{{category.id}}" class="btn btn-primary">Edit</a></td>
+                                    <td><form method="post" action="/admin/category/delete/{{category.id}}">{%csrf_token%}<button type="submit" class="btn btn-danger">Delete</button></form></td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{%endblock%}
