@@ -15,6 +15,7 @@ class Product(models.Model):
     quantity = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField()
+    
 
     @property
     def image_url(self):
