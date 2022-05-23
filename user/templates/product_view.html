@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <img src="{{product.image_url}}" class="profile_img" alt=""
+                style="height:200px;width:200px;border:1px;border-radius:100%">
+        </div>
+        <div class="col-lg-4">
+            <h1>{{product.name}}</h1> <br>
+            <h1>{{product.price}}</h1> <br>
+            <h2>{{product.description}}</h2><br>
+        </div>
+    </div>
+    {%if product.quantity != 0 %}
+    <form method="post" action="/cart/add/{{product.id}}">{%csrf_token%}<button class="btn btn-primary">ADD TO
+            CART</button></form>
+    {%else%}
+    <h1>out of stock</h1>
+    {%endif%}
+</section>
+{%endblock%}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Name </th>
+                                <th>Unit Price</th>
+                                <th colspan="3" style="text-align:center;">Quantity</th>
+                                <th>Total Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for cart_item in cart_items%}
+                            <tr>
+                                <td>{{cart_item.product.name}}</td>
+                                <td>{{cart_item.product.price}}</td>
+                                <td style="padding-right:0 ;">
+                                    <form action="/cart/quantity_minus/{{cart_item.id}}" method="post">
+                                        {%csrf_token%}<button type="submit" class="btn btn-primary btn-sm"
+                                            style="width: 25px;">-</button></form>
+                                </td>
+                                <td style="width: 40px; ">{{cart_item.quantity}} </td>
+                                <td>
+                                    <form action="/cart/quantity_add/{{cart_item.id}}" method="post">
+                                        {%csrf_token%}<button type="submit" class="btn btn-primary btn-sm"
+                                            style="width: 25px;">+</button></form>
+                                </td>
+                                <td>{{cart_item.total_price}}</td>
+                                <td>
+                                    <form action="/cart/remove/{{cart_item.id}}" method="post">{%csrf_token%}<button
+                                            class="btn btn-danger btn-sm" type="submit">Remove</button></form>
+                                </td>
+
+                            </tr>
+                            {%endfor%}
+                            <tr>
+                                <td colspan="5"><b>TOTAL</b></td>
+                                <td>{{total_price}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <div>
+                                    {% for message in messages %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p> {{message}}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
