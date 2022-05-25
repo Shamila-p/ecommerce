@@ -1,6 +1,9 @@
+from datetime import date, datetime
 from distutils.log import log
 import email
 from email.mime import image
+from itertools import product
+from unicodedata import name
 from wsgiref.util import request_uri
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -8,9 +11,10 @@ from django.contrib.auth.models import auth
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
 from django.contrib.auth import logout
-from .models import Cart, CustomUser
+from .models import Cart, CustomUser, Order
 from super_admin.models import Product
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 def home(request):
@@ -123,6 +127,34 @@ def remove_item(request, cart_item_id):
         cart_item.delete()
         return redirect('/cart')
 
+
+@login_required
+def check_out(request):
+    if request.method == 'GET':
+        cart_items = Cart.objects.filter(user_id=request.user.id)
+        total_price = 0
+        for cart_item in cart_items:
+            total_price = total_price + cart_item.total_price
+        return render(request, 'order.html', {'cart_items': cart_items, 'total_price': total_price})
+    if request.method == 'POST':
+
+        address = request.POST['address']
+        cart_items = Cart.objects.filter(user_id=request.user.id)
+        for cart_item in cart_items:
+            product_id = cart_item.product_id
+            quantity = cart_item.quantity
+            total_price = cart_item.total_price
+            date_time = datetime.now()
+            Order.objects.create(user_id=request.user.id, product_id=product_id, quantity=quantity,
+                                 address=address, total_price=total_price, ordered_date=date_time)
+        cart_items.delete()
+        return redirect('/')
+
+@login_required
+def order(request):
+    if request.method=='GET':
+        orders=Order.objects.filter(user_id=request.user.id)
+        return render(request,'order_view.html',{'orders':orders})
 
 def login(request):
     if request.user.is_authenticated:

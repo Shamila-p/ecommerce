@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from super_admin.models import Category
 from super_admin.models import Product
-from user.models import CustomUser
+from user.models import CustomUser, Order
 
 
 def index(request):
@@ -43,7 +43,8 @@ def logout(request):
 def dashboard(request):
     if not(request.user.is_authenticated and request.user.is_superuser):
         return redirect('/admin/login')
-    return render(request, 'dashboard.html')
+    #return render(request, 'dashboard.html')
+    return redirect('/admin/user')
 
 
 def user(request):
@@ -241,3 +242,9 @@ def delete_product(request, product_id):
         product.delete()
         return redirect('/admin/product')
 
+
+def orders(request):
+    if not(request.user.is_authenticated and request.user.is_superuser):
+        return redirect('/admin/login')
+    orders = Order.objects.all()
+    return render(request, 'admin_order.html', {'orders': orders})

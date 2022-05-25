@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="display-1">CHECK OUT</h3>
+<div class="row">
+    {%for cart_item in cart_items%}
+    <div class="card ml-5" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Product Name: {{cart_item.product.name}} </h5>
+            <h6 class="card-subtitle mb-2 text-muted">Quantity: {{cart_item.quantity}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Total Price: {{cart_item.total_price}}</h6>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+<br>
+<h3>Net Price: {{total_price}}</h3><br>
+<form action="/cart/check_out" method="post" >
+    {%csrf_token%}
+    <label>ADDRESS</label>
+    <textarea name="address" id="address" cols="30" rows="10" class="form-control"></textarea><br>
+    <button class="btn btn-primary">ORDER NOW</button>
+
+</form><br>
+{%endblock%}
